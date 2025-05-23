@@ -1,0 +1,8 @@
+{
+  "name": "shopping-list",
+  "version": "0.0.0",
+  "description": "A program that prints a shopping list",
+  "homepage": "https://github.com/NestorNebula/shopping-list",
+  "documentation": "https://github.com/NestorNebula/shopping-list/blob/main/README.md",
+  "license": "MIT"
+}
