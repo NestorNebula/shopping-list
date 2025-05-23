@@ -35,7 +35,7 @@ TEST(set_item_type, returns_new_type) {
 
 TEST(get_item_name, returns_empty_string_when_name_not_set) {
   Item itm = new_item();
-  EXPECT_THAT(get_item_name(itm), testing::IsEmpty());
+  EXPECT_THAT((const char *) get_item_name(itm), testing::IsEmpty());
   delete_item(itm);
 }
 
@@ -53,7 +53,7 @@ TEST(get_item_quantity, returns_zero_when_quantity_not_set) {
 }
 
 TEST(get_item_quantity, returns_item_quantity) {
-  Item itm = get_item();
+  Item itm = new_item();
   set_item_quantity(itm, QUANTITY);
   EXPECT_EQ(get_item_quantity(itm), QUANTITY);
   delete_item(itm);
@@ -61,7 +61,7 @@ TEST(get_item_quantity, returns_item_quantity) {
 
 TEST(get_item_type, returns_empty_string_when_type_not_set) {
   Item itm = new_item();
-  EXPECT_THAT(get_item_type(itm), testing::IsEmpty());
+  EXPECT_THAT((const char *) get_item_type(itm), testing::IsEmpty());
   delete_item(itm);
 }
 
