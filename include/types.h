@@ -3,4 +3,6 @@
 
 typedef struct item_type *Item;
 
+typedef struct list_type *List;
+
 #endif
