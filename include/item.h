@@ -7,7 +7,7 @@
  * Item:
  * Item is a type defined in the "types.h" header file.
  * Item is a pointer that points to a structure representing an item.
- * In this header file's comments, I will use the word "item" to
+ * In this header file's comments, the word "item" will be used to
  * desribe the item's structure pointed by an Item argument.
  */
 
