@@ -25,7 +25,7 @@ void delete_item(Item itm);
 TEST(new_list, returns_pointer_to_new_list) {
   List list = new_list();
   EXPECT_THAT(list, testing::NotNull());
-  clear_list(list);
+  delete_list(list);
 }
 
 TEST(add_item, returns_number_of_items) {
