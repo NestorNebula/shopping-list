@@ -64,6 +64,6 @@
   * after comparing the items.
   */
  void order_list(List list, 
-                 int (*compare_items)(const Item *itm1, const Item *Itm2));
+                 int (*compare_items)(const void *itm1, const void *itm2));
 
 #endif
