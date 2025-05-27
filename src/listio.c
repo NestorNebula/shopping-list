@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "item.h"
 #include "list.h"
 #include "listio.h"
@@ -45,6 +46,17 @@ Item read_item(void) {
 }
 
 int write_list(List list) {
+  if (env.visual) {
+    fprintf(env.stream, "%-*.*s | %s | %s\n",
+            MAX_NAME_LEN, MAX_NAME_LEN, "Name",
+            "Quantity",
+            "Type");
+    int line_len = MAX_NAME_LEN + strlen("Quantity") + 
+      MAX_TYPE_LEN + (strlen(" | ") * 2);
+    for (int i = 0; i < line_len; i++) fprintf(env.stream, "-");
+    fprintf(env.stream, "\n");
+  }
+
   for_each(list, write_item);
   return !feof(env.stream) && !ferror(env.stream);
 }
@@ -54,7 +66,7 @@ void write_item(Item itm) {
   char *name = get_item_name(itm), *type = get_item_type(itm);
   int quantity = get_item_quantity(itm);
   if (env.visual) {
-    fprintf(env.stream, "%-*.*s %-8d %-*.*s\n",
+    fprintf(env.stream, "%-*.*s | %8d | %-*.*s\n",
             MAX_NAME_LEN, MAX_NAME_LEN, name,
             quantity,
             MAX_TYPE_LEN, MAX_TYPE_LEN, type);
