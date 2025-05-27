@@ -155,8 +155,9 @@ List make_list(const char *list_name) {
       set_item_type(existing_item, get_item_type(itm));
       free(itm);
     } else {
-      add_item(list, itm);
-      printf("Item added\n");
+      if (add_item(list, itm) == -1) {
+        printf("Couldn't add item to the \"%s\" list.\n", list_name);
+      } else printf("Item added\n");
     }
   }
 
@@ -254,6 +255,8 @@ void add_item_to_shopping_list(Item need_itm) {
     set_item_name(itm, get_item_name(need_itm));
     set_item_type(itm, get_item_type(need_itm));
     set_item_quantity(itm, needs_quantity - inventory_quantity);
-    add_item(shopping_list, itm);
+    if (add_item(shopping_list, itm) == -1) {
+      printf("Couldn't add %s to shopping list.\n", get_item_name(need_itm));
+    } 
   }
 }
