@@ -13,7 +13,9 @@ List read_list(void) {
   while (!ferror(env.stream) && !feof(env.stream)) {
     Item itm = read_item();
     if (itm == NULL) break;
-    add_item(list, itm);
+    if (add_item(list, itm) == -1) {
+      printf("Couldn't add \"%s\" item\n", get_item_name(itm));
+    }
   }
   return list;
 }
@@ -89,6 +91,8 @@ char *read_str(char end_char) {
     str[length++] = ch;
   };
   if (ch == end_char) return str;
+
+  // Free str if end_char wasn't met until end of file
   free(str);
   return NULL;
 }

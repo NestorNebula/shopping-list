@@ -5,7 +5,7 @@
 #define LETTERS 26
 
 /*
- * encrypt_letter:
+ * encrypt_char:
  * Use key to encrypt character using Caesar Cipher technique.
  * The only characters that will be encrypted are letters,
  * other characters will be left unchanged.
@@ -22,6 +22,7 @@ char *encrypt_str(char *str, int key) {
 }
 
 char *decrypt_str(char *str, int key) {
+  // Revert key to opposite to decrypt str
   key = (LETTERS - abs(key) % LETTERS) % LETTERS;
   for (char *p = str; *p != '\0'; p++) {
     *p = encrypt_char(*p, key);

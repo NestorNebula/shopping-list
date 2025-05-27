@@ -15,6 +15,8 @@ int scan_line(char *format, ...) {
 bool ask_question(const char *question, ...) {
   char ch;
   va_list ap;
+  
+  // Ask question until user enter a 'y' or a 'n'
   do {
     va_start(ap, question);
     vprintf(question, ap);

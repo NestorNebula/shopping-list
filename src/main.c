@@ -8,11 +8,14 @@
 #include "itemhelpers.h"
 #include "helpers.h"
 
+// Used in listio functions
 extern struct env_type env;
+
+// Used in itemhelpers functions
 extern Item active_item;
 extern int key;
 
-List inventory, needs_list, shopping_list;
+List inventory, needs, shopping_list;
 
 /*
  * make_inventory:
@@ -67,18 +70,18 @@ int main(void) {
   write_list(inventory);
 
   env.stream = NULL;
-  needs_list = make_list("needs");
+  needs = make_list("needs");
 
   env.stream = stdout;
   printf("\nNeeds:\n");
-  write_list(needs_list);
+  write_list(needs);
 
   shopping_list = new_list();
   if (shopping_list == NULL) {
     printf("Not enough space to create shopping list.\n");
     exit(EXIT_FAILURE);
   }
-  for_each(needs_list, add_item_to_shopping_list);
+  for_each(needs, add_item_to_shopping_list);
 
   order_list(shopping_list, compare_items);
 
@@ -102,7 +105,7 @@ int main(void) {
   }
 
   handle_list_saving(inventory, "inventory");
-  handle_list_saving(needs_list, "needs");
+  handle_list_saving(needs, "needs");
 }
 
 
@@ -125,6 +128,7 @@ List make_list(const char *list_name) {
     }
   }
 
+  // If env.stream set read list from the file, else create a new one
   List list = env.stream == NULL ? new_list() : read_list();
   if (list == NULL) {
     printf("Error during %s creation.\n", list_name);
@@ -143,12 +147,16 @@ List make_list(const char *list_name) {
   } else env.stream = stdout;
 
   env.stream = stdin;
+  
+  // Add items in list while user doesn't ask to stop and no error occur
   for (;;) {
     if (!ask_question("\nDo you want to enter a new item in your %s?", 
                       list_name)) break;
     Item itm = handle_new_item();
     if (itm == NULL) break;
     Item existing_item = get_item(list, is_item);
+
+    // If item already exists in the list, update it
     if (existing_item != NULL) {
       printf("%s already exists, updating item.\n", get_item_name(itm));
       set_item_quantity(existing_item, get_item_quantity(itm));
@@ -197,6 +205,8 @@ Item handle_new_item(void) {
     return itm;
   }
   char *name = NULL;
+
+  // Prompt the user for a name until a non-emtpy name is set or an error occur
   do {
     free(name);
     printf("Enter item's name: ");
@@ -216,11 +226,14 @@ Item handle_new_item(void) {
   }
   free(name);
   int quantity;
+  
+  // Prompt the user for a positive quantity
   do {
     printf("Enter item's quantity: ");
     scan_line("%d", &quantity);
   } while (quantity <= 0);
   set_item_quantity(itm, quantity);
+
   printf("Enter item's type (optional): ");
   char *type = read_str('\n');
   if (type == NULL) {
@@ -241,12 +254,18 @@ Item handle_new_item(void) {
 void add_item_to_shopping_list(Item need_itm) {
   set_active_item(need_itm);
   Item inventory_itm = get_item(inventory, is_item);
+
+  // If item isn't in inventory, add need_itm as is in the list
   if (inventory_itm == NULL) {
     add_item(shopping_list, need_itm);
     return;
   }
   int inventory_quantity = get_item_quantity(inventory_itm),
       needs_quantity = get_item_quantity(need_itm);
+
+  /* If need_itm quantity is more than quantity in inventory,
+     add item to the list with a quantity corresponding to the difference
+     between need and inventory. */
   if (needs_quantity > inventory_quantity) {
     Item itm = new_item();
     if (itm == NULL) {

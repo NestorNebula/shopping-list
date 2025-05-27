@@ -79,6 +79,8 @@ static char *update_str(char *old_str, const char *new_content, char **str_pt) {
   if (new_str == NULL) return new_str;
 
   strcpy(new_str, new_content);
+
+  // Release memory taken by old string and make str_pt point to new one
   free(old_str);
   *str_pt = new_str;
 
